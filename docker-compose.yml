@@ -1,0 +1,17 @@
+version: '3.3'
+
+services:
+  backend:
+    build:
+      context: .
+      dockerfile: dockerfile
+      target: production
+    container_name: ecos_backend
+    image: ecos_backend_image
+    environment:
+      - DATABASE_URL=postgresql://root:Ph@mNgocH4n@10.22.65.209:5432/db_ecos
+    ports:
+      - "4040:3000" 
+    volumes:
+      - .:/usr/src/app
+    command: ["node", "dist/main.js"]
