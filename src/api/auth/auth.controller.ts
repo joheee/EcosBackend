@@ -1,22 +1,53 @@
 import { Controller, Post, Body, Patch } from '@nestjs/common';
 import { AuthService } from './auth.service';
-import { CreateAuthDto } from './dto/create-auth.dto';
-import { ApiOperation, ApiTags } from '@nestjs/swagger';
+import { LoginAuthDto } from './dto/login-auth.dto';
+import { ApiBody, ApiOperation, ApiTags } from '@nestjs/swagger';
+import { RegisterAuthDto } from './dto/register-auth.dto';
+import { Role } from '@prisma/client';
 
 @ApiTags('authentication')
 @Controller('auth')
 export class AuthController {
   constructor(private readonly authService: AuthService) {}
 
-  @ApiOperation({ summary: 'login for all users' })
   @Post()
-  create(@Body() createAuthDto: CreateAuthDto) {
-    return this.authService.create(createAuthDto);
+  @ApiOperation({ summary: 'login for all users' })
+  @ApiBody({
+    description: 'endpoint for customer, driver, and admin login',
+    type: LoginAuthDto,
+    examples: {
+      example1: {
+        summary: 'sample input',
+        description: 'Example payload for login new user',
+        value: {
+          email: 'customer@gmail.com',
+          password: 'customer123',
+        },
+      },
+    },
+  })
+  async login(@Body() loginAuthDto: LoginAuthDto) {
+    return await this.authService.login(loginAuthDto);
   }
 
-  @ApiOperation({ summary: 'register for customer, driver, and admin' })
   @Patch()
-  customer(@Body() createAuthDto: CreateAuthDto) {
-    return this.authService.create(createAuthDto);
+  @ApiOperation({ summary: 'register for customer, driver, and admin' })
+  @ApiBody({
+    description: 'endpoint for register new customer, driver, and admin',
+    type: RegisterAuthDto,
+    examples: {
+      example1: {
+        summary: 'sample input',
+        description: 'Example payload for login new user',
+        value: {
+          email: 'customer@gmail.com',
+          password: 'customer123',
+          role: Role.CUSTOMER,
+        },
+      },
+    },
+  })
+  customer(@Body() registerAuthDto: RegisterAuthDto) {
+    return this.authService.register(registerAuthDto);
   }
 }
