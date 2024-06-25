@@ -10,38 +10,31 @@ import {
 import { UserDetailService } from './user_detail.service';
 import { CreateUserDetailDto } from './dto/create-user_detail.dto';
 import { UpdateUserDetailDto } from './dto/update-user_detail.dto';
-import { ApiTags } from '@nestjs/swagger';
+import { ApiOperation, ApiQuery, ApiTags } from '@nestjs/swagger';
 
 @ApiTags('user detail')
 @Controller('user-detail')
 export class UserDetailController {
   constructor(private readonly userDetailService: UserDetailService) {}
 
-  @Post()
+  @Get(':email')
+  @ApiOperation({ summary: 'get user detail by email' })
+  async findOne(@Param('email') email: string) {
+    return await this.userDetailService.findOne(email);
+  }
+
+  @Post(':email')
+  @ApiOperation({ summary: 'create user detail by email' })
   create(@Body() createUserDetailDto: CreateUserDetailDto) {
     return this.userDetailService.create(createUserDetailDto);
   }
 
-  @Get()
-  findAll() {
-    return this.userDetailService.findAll();
-  }
-
-  @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.userDetailService.findOne(+id);
-  }
-
-  @Patch(':id')
+  @Patch(':email')
+  @ApiOperation({ summary: 'update user detail by email' })
   update(
-    @Param('id') id: string,
+    @Param('email') email: string,
     @Body() updateUserDetailDto: UpdateUserDetailDto,
   ) {
-    return this.userDetailService.update(+id, updateUserDetailDto);
-  }
-
-  @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.userDetailService.remove(+id);
+    return this.userDetailService.update(email, updateUserDetailDto);
   }
 }
