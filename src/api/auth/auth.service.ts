@@ -35,7 +35,9 @@ export class AuthService {
       email,
       role: loggedUser.role,
     };
-    return await this.jwtService.signAsync(payload);
+    return {
+      access_token: this.jwtService.sign(payload),
+    };
   }
 
   async register(registerAuthDto: RegisterAuthDto) {
@@ -60,6 +62,8 @@ export class AuthService {
       email,
       role: role,
     };
-    return await this.jwtService.signAsync(payload);
+    return {
+      access_token: this.jwtService.sign(payload),
+    };
   }
 }
