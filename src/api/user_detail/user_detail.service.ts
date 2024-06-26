@@ -10,16 +10,16 @@ export class UserDetailService {
   async findOne(email: string) {
     const userDetail = await this.prisma.user.findUnique({
       where: {
-        email:email
+        email: email,
       },
-      include:{
-        user_detail:true
-      }
-    })
+      include: {
+        user_detail: true,
+      },
+    });
 
-    if(!userDetail) throw new NotFoundException('user is not found!')
+    if (!userDetail) throw new NotFoundException('user is not found!');
 
-    return userDetail
+    return userDetail;
   }
 
   create(createUserDetailDto: CreateUserDetailDto) {
