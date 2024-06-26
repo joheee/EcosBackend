@@ -8,6 +8,7 @@ datasource db {
 }
 
 enum Role {
+  DEFAULT
   ADMIN
   DRIVER
   CUSTOMER
@@ -24,7 +25,7 @@ model User {
 model UserDetail {
   email                String  @id
   profile_image        String
-  phone                Int     @unique
+  phone                String  @unique
   name                 String
   street               String
   grade                Int

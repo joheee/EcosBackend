@@ -3,7 +3,6 @@ import { AuthService } from './auth.service';
 import { LoginAuthDto } from './dto/login-auth.dto';
 import { ApiBody, ApiOperation, ApiTags } from '@nestjs/swagger';
 import { RegisterAuthDto } from './dto/register-auth.dto';
-import { Role } from '@prisma/client';
 
 @ApiTags('authentication')
 @Controller('auth')
@@ -42,7 +41,10 @@ export class AuthController {
         value: {
           email: 'customer@gmail.com',
           password: 'customer123',
-          role: Role.CUSTOMER,
+          phone: '0852',
+          name: 'first customer',
+          street: 'string',
+          grade: 5,
         },
       },
     },
