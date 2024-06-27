@@ -1,8 +1,10 @@
-import { Controller, Post, Body, Patch } from '@nestjs/common';
+import { Controller, Post, Body, Patch, UseGuards, Req } from '@nestjs/common';
 import { AuthService } from './auth.service';
-import { LoginAuthDto } from './dto/login-auth.dto';
 import { ApiBody, ApiOperation, ApiTags } from '@nestjs/swagger';
 import { RegisterAuthDto } from './dto/register-auth.dto';
+import { Request } from 'express';
+import { LocalGuard } from '../auth/guards/local.guard';
+import { LoginAuthDto } from './dto/login-auth.dto';
 
 @ApiTags('authentication')
 @Controller('auth')
@@ -10,6 +12,7 @@ export class AuthController {
   constructor(private readonly authService: AuthService) {}
 
   @Post()
+  @UseGuards(LocalGuard)
   @ApiOperation({ summary: 'login for all users' })
   @ApiBody({
     description: 'endpoint for customer, driver, and admin login',
@@ -25,8 +28,8 @@ export class AuthController {
       },
     },
   })
-  async login(@Body() loginAuthDto: LoginAuthDto) {
-    return await this.authService.login(loginAuthDto);
+  async login(@Req() req: Request) {
+    return req.user;
   }
 
   @Patch()

@@ -21,13 +21,6 @@ export class AuthService {
   async login(loginAuthDto: LoginAuthDto) {
     try {
       const { email, password } = loginAuthDto;
-
-      if (typeof email === 'undefined' || typeof password === 'undefined') {
-        throw new BadRequestException(
-          'All fields must be provided! [email, password]',
-        );
-      }
-
       const loggedUser = await this.prisma.user.findUnique({
         where: { email },
       });
@@ -49,14 +42,8 @@ export class AuthService {
         access_token: this.jwtService.sign(payload),
       };
     } catch (error) {
-      if (
-        error instanceof UnauthorizedException ||
-        error instanceof BadRequestException
-      ) {
-        throw error;
-      }
       throw new InternalServerErrorException(
-        'An unexpected error occurred during login.',
+        `An unexpected error occurred during login: ${error}`,
       );
     }
   }

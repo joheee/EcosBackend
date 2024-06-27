@@ -3,7 +3,7 @@ import { UserDetailService } from './user_detail.service';
 import { UserDetailController } from './user_detail.controller';
 import { PrismaModule } from 'src/prisma/prisma.module';
 import { JwtModule } from '@nestjs/jwt';
-import { jwtConstants } from '../auth/jwt/constants';
+import { jwtConstants } from 'src/jwt/constants';
 
 @Module({
   imports: [
