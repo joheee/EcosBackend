@@ -23,7 +23,7 @@ import { User } from '@prisma/client';
 
 @ApiTags('user detail (token required)')
 @Controller('user-detail')
-@ApiBearerAuth()
+@ApiBearerAuth('access-token')
 export class UserDetailController {
   constructor(private readonly userDetailService: UserDetailService) {}
 
