@@ -8,6 +8,7 @@ export class UserDetailService {
   constructor(private prisma: PrismaService) {}
 
   async findOne(email: string) {
+    return email;
     const userDetail = await this.prisma.user.findUnique({
       where: {
         email: email,
@@ -18,7 +19,6 @@ export class UserDetailService {
     });
 
     if (!userDetail) throw new NotFoundException('user is not found!');
-
     return userDetail;
   }
 
