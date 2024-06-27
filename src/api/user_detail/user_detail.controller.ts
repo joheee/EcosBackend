@@ -5,7 +5,8 @@ import {
   Body,
   Patch,
   Param,
-  Headers,
+  UseGuards,
+  Req,
 } from '@nestjs/common';
 import { UserDetailService } from './user_detail.service';
 import { CreateUserDetailDto } from './dto/create-user_detail.dto';
@@ -16,6 +17,9 @@ import {
   ApiParam,
   ApiTags,
 } from '@nestjs/swagger';
+import { JwtAuthGuard } from '../auth/guards/jwt.guard';
+import { Request } from 'express';
+import { User } from '@prisma/client';
 
 @ApiTags('user detail (token required)')
 @Controller('user-detail')
@@ -24,9 +28,10 @@ export class UserDetailController {
   constructor(private readonly userDetailService: UserDetailService) {}
 
   @Get('')
+  @UseGuards(JwtAuthGuard)
   @ApiOperation({ summary: 'get user detail by email' })
-  async findOne(@Headers('authorization') headers: string) {
-    return await this.userDetailService.findOne(headers);
+  async findOne(@Req() req: Request) {
+    return await this.userDetailService.findOne(req.user as User);
   }
 
   @Post(':email')

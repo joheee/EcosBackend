@@ -2,19 +2,16 @@ import { Injectable, NotFoundException } from '@nestjs/common';
 import { CreateUserDetailDto } from './dto/create-user_detail.dto';
 import { UpdateUserDetailDto } from './dto/update-user_detail.dto';
 import { PrismaService } from 'src/prisma/prisma.service';
-import { JwtService } from '@nestjs/jwt';
+import { User } from '@prisma/client';
 
 @Injectable()
 export class UserDetailService {
-  constructor(
-    private prisma: PrismaService,
-    private jwtService: JwtService,
-  ) {}
+  constructor(private prisma: PrismaService) {}
 
-  async findOne(email: string) {
+  async findOne(user: User) {
     const userDetail = await this.prisma.user.findUnique({
       where: {
-        email: email,
+        email: user.email,
       },
       include: {
         user_detail: true,
