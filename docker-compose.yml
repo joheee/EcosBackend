@@ -10,7 +10,8 @@ services:
     image: ecos_backend_image
     restart: always
     environment:
-      - DATABASE_URL=postgresql://root:Ph@mNgocH4n@10.22.65.209:5432/db_ecos
+      - DATABASE_URL_NETMAN=postgresql://root:Ph@mNgocH4n@10.22.65.209:5432/db_ecos
+      - DATABASE_URL=postgresql://root:Ph@mNgocH4n@93.127.216.74:5432/db_ecos
     ports:
       - "4040:3000" 
     volumes:
