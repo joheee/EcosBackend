@@ -1,25 +1,10 @@
-import {
-  Controller,
-  Get,
-  Post,
-  Body,
-  Patch,
-  Param,
-  UseGuards,
-  Req,
-} from '@nestjs/common';
+import { Controller, Get, Body, Patch, UseGuards, Req } from '@nestjs/common';
 import { UserDetailService } from './user_detail.service';
-import { CreateUserDetailDto } from './dto/create-user_detail.dto';
 import { UpdateUserDetailDto } from './dto/update-user_detail.dto';
-import {
-  ApiBearerAuth,
-  ApiOperation,
-  ApiParam,
-  ApiTags,
-} from '@nestjs/swagger';
+import { ApiBearerAuth, ApiBody, ApiOperation, ApiTags } from '@nestjs/swagger';
 import { JwtAuthGuard } from '../auth/guards/jwt.guard';
 import { Request } from 'express';
-import { User } from '@prisma/client';
+import { Role, User } from '@prisma/client';
 
 @ApiTags('user detail (token required)')
 @Controller('user-detail')
@@ -34,30 +19,36 @@ export class UserDetailController {
     return await this.userDetailService.findOne(req.user as User);
   }
 
-  @Post(':email')
-  @ApiOperation({ summary: 'create user detail by email' })
-  @ApiParam({
-    name: 'email',
-    required: true,
-    description: 'Email of the user',
-    example: 'customer@gmail.com',
-  })
-  create(@Body() createUserDetailDto: CreateUserDetailDto) {
-    return this.userDetailService.create(createUserDetailDto);
-  }
-
-  @Patch(':email')
+  @Patch('')
+  @UseGuards(JwtAuthGuard)
   @ApiOperation({ summary: 'update user detail by email' })
-  @ApiParam({
-    name: 'email',
-    required: true,
-    description: 'Email of the user',
-    example: 'customer@gmail.com',
+  @ApiBody({
+    description: 'endpoint for customer, driver, and admin login',
+    type: UpdateUserDetailDto,
+    examples: {
+      sample_input: {
+        summary: 'sample input',
+        description: 'Example payload for update user detail',
+        value: {
+          role: Role.CUSTOMER,
+          profile_image: 'images.webp',
+          phone: '1234',
+          name: 'dummy user 1',
+          street: 'kh syahdan',
+          grade: 5,
+          is_phone_verified: true,
+          is_email_verified: true,
+        },
+      },
+    },
   })
-  update(
-    @Param('email') email: string,
+  async update(
+    @Req() req: Request,
     @Body() updateUserDetailDto: UpdateUserDetailDto,
   ) {
-    return this.userDetailService.update(email, updateUserDetailDto);
+    return await this.userDetailService.update(
+      req.user as User,
+      updateUserDetailDto,
+    );
   }
 }
