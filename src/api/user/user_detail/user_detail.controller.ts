@@ -1,10 +1,10 @@
 import { Controller, Get, Body, Patch, UseGuards, Req } from '@nestjs/common';
 import { UserDetailService } from './user_detail.service';
-import { UpdateUserDetailDto } from './dto/update-user_detail.dto';
+import { UserDetailDto } from './dto/user_detail.dto';
 import { ApiBearerAuth, ApiBody, ApiOperation, ApiTags } from '@nestjs/swagger';
-import { JwtAuthGuard } from '../auth/guards/jwt.guard';
 import { Request } from 'express';
 import { Role, User } from '@prisma/client';
+import { JwtAuthGuard } from 'src/api/auth/guards/jwt.guard';
 
 @ApiTags('user detail (token required)')
 @Controller('user-detail')
@@ -23,8 +23,8 @@ export class UserDetailController {
   @UseGuards(JwtAuthGuard)
   @ApiOperation({ summary: 'update user detail by email (optional field)' })
   @ApiBody({
-    description: 'endpoint for customer, driver, and admin login',
-    type: UpdateUserDetailDto,
+    description: 'endpoint for customer, driver, and admin detail information',
+    type: UserDetailDto,
     examples: {
       sample_input: {
         summary: 'sample input',
@@ -42,13 +42,7 @@ export class UserDetailController {
       },
     },
   })
-  async update(
-    @Req() req: Request,
-    @Body() updateUserDetailDto: UpdateUserDetailDto,
-  ) {
-    return await this.userDetailService.update(
-      req.user as User,
-      updateUserDetailDto,
-    );
+  async update(@Req() req: Request, @Body() userDetailDto: UserDetailDto) {
+    return await this.userDetailService.update(req.user as User, userDetailDto);
   }
 }

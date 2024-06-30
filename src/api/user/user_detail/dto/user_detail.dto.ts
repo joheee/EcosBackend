@@ -1,6 +1,6 @@
 import { Role } from '@prisma/client';
 
-export class UpdateUserDetailDto {
+export class UserDetailDto {
   role: Role;
   profile_image: string;
   phone: string;

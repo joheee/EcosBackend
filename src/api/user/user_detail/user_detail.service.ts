@@ -6,7 +6,7 @@ import {
   InternalServerErrorException,
   NotFoundException,
 } from '@nestjs/common';
-import { UpdateUserDetailDto } from './dto/update-user_detail.dto';
+import { UserDetailDto } from './dto/user_detail.dto';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { User } from '@prisma/client';
 
@@ -32,7 +32,7 @@ export class UserDetailService {
     return new HttpException(userDetail, HttpStatus.CREATED);
   }
 
-  async update(user: User, updateUserDetailDto: UpdateUserDetailDto) {
+  async update(user: User, userDetailDto: UserDetailDto) {
     try {
       const emailCheck = await this.prisma.user.findUnique({
         where: {
@@ -45,12 +45,12 @@ export class UserDetailService {
 
       const phoneCheck = await this.prisma.userDetail.findUnique({
         where: {
-          phone: updateUserDetailDto.phone,
+          phone: userDetailDto.phone,
         },
       });
       if (phoneCheck) {
         throw new BadRequestException(
-          `phone ${updateUserDetailDto.phone} is already used!`,
+          `phone ${userDetailDto.phone} is already used!`,
         );
       }
 
@@ -59,17 +59,17 @@ export class UserDetailService {
           email: user.email,
         },
         data: {
-          role: updateUserDetailDto.role,
+          role: userDetailDto.role,
           user_detail: {
             update: {
               data: {
-                profile_image: updateUserDetailDto.profile_image,
-                phone: updateUserDetailDto.phone,
-                name: updateUserDetailDto.name,
-                street: updateUserDetailDto.street,
-                grade: updateUserDetailDto.grade,
-                is_email_verified: updateUserDetailDto.is_email_verified,
-                is_phone_verified: updateUserDetailDto.is_phone_verified,
+                profile_image: userDetailDto.profile_image,
+                phone: userDetailDto.phone,
+                name: userDetailDto.name,
+                street: userDetailDto.street,
+                grade: userDetailDto.grade,
+                is_email_verified: userDetailDto.is_email_verified,
+                is_phone_verified: userDetailDto.is_phone_verified,
               },
             },
           },

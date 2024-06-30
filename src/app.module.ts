@@ -1,8 +1,9 @@
 import { Module } from '@nestjs/common';
-import { UserDetailModule } from './api/user_detail/user_detail.module';
 import { AuthModule } from './api/auth/auth.module';
 import { ServeStaticModule } from '@nestjs/serve-static';
 import { join } from 'path';
+import { DriverVehicleDetailModule } from './api/driver/driver_vehicle_detail/driver_vehicle_detail.module';
+import { UserDetailModule } from './api/user/user_detail/user_detail.module';
 
 @Module({
   imports: [
@@ -11,6 +12,7 @@ import { join } from 'path';
     }),
     AuthModule,
     UserDetailModule,
+    DriverVehicleDetailModule,
   ],
 })
 export class AppModule {}
