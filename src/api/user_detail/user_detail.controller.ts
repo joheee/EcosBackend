@@ -21,7 +21,7 @@ export class UserDetailController {
 
   @Patch('')
   @UseGuards(JwtAuthGuard)
-  @ApiOperation({ summary: 'update user detail by email' })
+  @ApiOperation({ summary: 'update user detail by email (optional field)' })
   @ApiBody({
     description: 'endpoint for customer, driver, and admin login',
     type: UpdateUserDetailDto,
