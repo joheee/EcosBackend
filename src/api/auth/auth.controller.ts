@@ -17,16 +17,6 @@ export class AuthController {
   @ApiBody({
     description: 'endpoint for customer, driver, and admin login',
     type: LoginAuthDto,
-    examples: {
-      example1: {
-        summary: 'sample input',
-        description: 'Example payload for login new user',
-        value: {
-          email: 'customer@gmail.com',
-          password: 'customer123',
-        },
-      },
-    },
   })
   async login(@Req() req: Request) {
     return req.user;
@@ -37,20 +27,6 @@ export class AuthController {
   @ApiBody({
     description: 'endpoint for register new customer, driver, and admin',
     type: RegisterAuthDto,
-    examples: {
-      example1: {
-        summary: 'sample input',
-        description: 'Example payload for login new user',
-        value: {
-          email: 'customer@gmail.com',
-          password: 'customer123',
-          phone: '0852',
-          name: 'first customer',
-          street: 'string',
-          grade: 5,
-        },
-      },
-    },
   })
   customer(@Body() registerAuthDto: RegisterAuthDto) {
     return this.authService.register(registerAuthDto);

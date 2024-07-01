@@ -23,19 +23,6 @@ export class DriverVehicleDetailController {
   @ApiBody({
     description: 'intended for driver only',
     type: DriverVehicleDetail,
-    examples: {
-      sample_input: {
-        summary: 'sample input',
-        description: 'Example payload for update driver detail',
-        value: {
-          vehicle_image: 'images.webp',
-          vehicle_category: 'jeep',
-          vehicle_model: 'old fashioned jeep',
-          vehicle_capacity: 3,
-          vehicle_number_plate: '6961',
-        },
-      },
-    },
   })
   async create(
     @Req() req: Request,

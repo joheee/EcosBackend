@@ -3,7 +3,7 @@ import { UserDetailService } from './user_detail.service';
 import { UserDetailDto } from './dto/user_detail.dto';
 import { ApiBearerAuth, ApiBody, ApiOperation, ApiTags } from '@nestjs/swagger';
 import { Request } from 'express';
-import { Role, User } from '@prisma/client';
+import { User } from '@prisma/client';
 import { JwtAuthGuard } from 'src/api/auth/guards/jwt.guard';
 
 @ApiTags('user detail (token required)')
@@ -25,22 +25,6 @@ export class UserDetailController {
   @ApiBody({
     description: 'endpoint for customer, driver, and admin detail information',
     type: UserDetailDto,
-    examples: {
-      sample_input: {
-        summary: 'sample input',
-        description: 'Example payload for update user detail',
-        value: {
-          role: Role.CUSTOMER,
-          profile_image: 'images.webp',
-          phone: '1234',
-          name: 'dummy user 1',
-          street: 'kh syahdan',
-          grade: 5,
-          is_phone_verified: true,
-          is_email_verified: true,
-        },
-      },
-    },
   })
   async update(@Req() req: Request, @Body() userDetailDto: UserDetailDto) {
     return await this.userDetailService.update(req.user as User, userDetailDto);
