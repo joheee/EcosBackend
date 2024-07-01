@@ -1,14 +1,9 @@
 import { BadRequestException, Injectable, PipeTransform } from '@nestjs/common';
+import { UserDetailDto } from '../dto/user_detail.dto';
 
 @Injectable()
 export class ParseUserDetailPipe implements PipeTransform {
-  transform(value: any) {
-    // if (typeof value !== 'object' || value === null) {
-    //   throw new BadRequestException(
-    //     `Validation failed (object expected) but got : ${value}`,
-    //   );
-    // }
-
+  transform(value: UserDetailDto) {
     const result = { ...value };
 
     // Convert fields to their appropriate types
@@ -21,7 +16,6 @@ export class ParseUserDetailPipe implements PipeTransform {
     if (result.grade !== undefined) {
       result.grade = this.toNumber(result.grade);
     }
-
     return result;
   }
 

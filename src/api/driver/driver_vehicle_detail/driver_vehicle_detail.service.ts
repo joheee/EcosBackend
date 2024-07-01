@@ -8,13 +8,13 @@ import {
 } from '@nestjs/common';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { User } from '@prisma/client';
-import { DriverVehicleDetail } from './dto/driver_vehicle_detail';
+import { DriverVehicleDetailDto } from './dto/driver_vehicle_detail.dto';
 
 @Injectable()
 export class DriverVehicleDetailService {
   constructor(private prisma: PrismaService) {}
 
-  async create(user: User, driverVehicleDetail: DriverVehicleDetail) {
+  async create(user: User, driverVehicleDetailDto: DriverVehicleDetailDto) {
     try {
       const currDrriver = await this.prisma.user.findUnique({
         where: {
@@ -31,11 +31,11 @@ export class DriverVehicleDetailService {
           email: user.email,
         },
         data: {
-          vehicle_image: driverVehicleDetail.vehicle_image,
-          vehicle_category: driverVehicleDetail.vehicle_category,
-          vehicle_model: driverVehicleDetail.vehicle_model,
-          vehicle_capacity: driverVehicleDetail.vehicle_capacity,
-          vehicle_number_plate: driverVehicleDetail.vehicle_number_plate,
+          vehicle_image: driverVehicleDetailDto.vehicle_image,
+          vehicle_category: driverVehicleDetailDto.vehicle_category,
+          vehicle_model: driverVehicleDetailDto.vehicle_model,
+          vehicle_capacity: driverVehicleDetailDto.vehicle_capacity,
+          vehicle_number_plate: driverVehicleDetailDto.vehicle_number_plate,
         },
       });
       return new HttpException(createUpdateDriverVehicle, HttpStatus.CREATED);
@@ -46,9 +46,11 @@ export class DriverVehicleDetailService {
       ) {
         throw error;
       } else {
-        throw new InternalServerErrorException('An unexpected error occurred');
+        throw new InternalServerErrorException(
+          `An unexpected error occurred: ${error}`,
+        );
       }
     }
-    return driverVehicleDetail;
+    return driverVehicleDetailDto;
   }
 }

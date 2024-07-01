@@ -42,7 +42,7 @@ export class UserDetailDto {
   @ApiProperty({
     type: 'string',
     format: 'binary',
-    description: 'user profile',
+    description: 'user image input',
     required: false,
   })
   profile_image_file?: string;
@@ -62,7 +62,7 @@ export class UserDetailDto {
 
   @IsOptional()
   @IsNumber()
-  @Transform(({ value }) => parseInt(value, 10))
+  @Transform(({ value }) => parseInt(value))
   @ApiProperty({
     example: 5,
     description: 'The grade of the user',

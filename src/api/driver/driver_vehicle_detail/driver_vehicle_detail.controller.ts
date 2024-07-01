@@ -1,10 +1,28 @@
-import { Body, Controller, Post, Req, UseGuards } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Post,
+  Req,
+  UploadedFile,
+  UseGuards,
+  UseInterceptors,
+  UsePipes,
+} from '@nestjs/common';
 import { DriverVehicleDetailService } from './driver_vehicle_detail.service';
-import { ApiBearerAuth, ApiBody, ApiOperation, ApiTags } from '@nestjs/swagger';
+import {
+  ApiBearerAuth,
+  ApiBody,
+  ApiConsumes,
+  ApiOperation,
+  ApiTags,
+} from '@nestjs/swagger';
 import { JwtAuthGuard } from 'src/api/auth/guards/jwt.guard';
 import { Request } from 'express';
-import { DriverVehicleDetail } from './dto/driver_vehicle_detail';
+import { DriverVehicleDetailDto } from './dto/driver_vehicle_detail.dto';
 import { User } from '@prisma/client';
+import { FileInterceptor } from '@nestjs/platform-express';
+import { DriverVehicleDetailUpload } from './upload/driver_vehicle_detail.upload';
+import { ParseDriverDetailPipe } from './pipe/parse_driver_detail.pipe';
 
 @ApiTags('driver detail (token required)')
 @Controller('driver-vehicle-detail')
@@ -16,21 +34,32 @@ export class DriverVehicleDetailController {
 
   @Post('')
   @UseGuards(JwtAuthGuard)
+  @ApiConsumes('multipart/form-data')
+  @UsePipes(new ParseDriverDetailPipe())
+  @UseInterceptors(
+    FileInterceptor('vehicle_image_file', {
+      storage: DriverVehicleDetailUpload.storageOptions,
+    }),
+  )
   @ApiOperation({
     summary:
       "create or update driver's vehicle detail by email (optional field)",
   })
   @ApiBody({
     description: 'intended for driver only',
-    type: DriverVehicleDetail,
+    type: DriverVehicleDetailDto,
   })
   async create(
     @Req() req: Request,
-    @Body() driverVehicleDetail: DriverVehicleDetail,
+    @UploadedFile() vehicle_image_file: Express.Multer.File,
+    @Body() driverVehicleDetailDto: DriverVehicleDetailDto,
   ) {
+    if (vehicle_image_file !== null) {
+      driverVehicleDetailDto.vehicle_image = vehicle_image_file.filename;
+    }
     return await this.driverVehicleDetailService.create(
       req.user as User,
-      driverVehicleDetail,
+      driverVehicleDetailDto,
     );
   }
 }
