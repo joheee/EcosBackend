@@ -43,15 +43,44 @@ export class UserDetailService {
         throw new NotFoundException(`email ${user.email} is not found!`);
       }
 
-      const phoneCheck = await this.prisma.userDetail.findUnique({
-        where: {
-          phone: userDetailDto.phone,
-        },
-      });
-      if (phoneCheck) {
-        throw new BadRequestException(
-          `phone ${userDetailDto.phone} is already used!`,
-        );
+      if (userDetailDto.phone !== undefined) {
+        const phoneCheck = await this.prisma.userDetail.findUnique({
+          where: {
+            phone: userDetailDto.phone,
+          },
+        });
+        if (phoneCheck) {
+          throw new BadRequestException(
+            `phone ${userDetailDto.phone} is already used!`,
+          );
+        }
+
+        const updateUser = await this.prisma.user.update({
+          where: {
+            email: user.email,
+          },
+          data: {
+            role: userDetailDto.role,
+            user_detail: {
+              update: {
+                data: {
+                  profile_image: userDetailDto.profile_image,
+                  phone: userDetailDto.phone,
+                  name: userDetailDto.name,
+                  street: userDetailDto.street,
+                  grade: userDetailDto.grade,
+                  is_email_verified: userDetailDto.is_email_verified,
+                  is_phone_verified: userDetailDto.is_phone_verified,
+                },
+              },
+            },
+          },
+          include: {
+            user_detail: true,
+          },
+        });
+
+        return new HttpException(updateUser, HttpStatus.CREATED);
       }
 
       const updateUser = await this.prisma.user.update({
@@ -64,7 +93,6 @@ export class UserDetailService {
             update: {
               data: {
                 profile_image: userDetailDto.profile_image,
-                phone: userDetailDto.phone,
                 name: userDetailDto.name,
                 street: userDetailDto.street,
                 grade: userDetailDto.grade,
@@ -87,7 +115,9 @@ export class UserDetailService {
       ) {
         throw error;
       } else {
-        throw new InternalServerErrorException('An unexpected error occurred');
+        throw new InternalServerErrorException(
+          'An unexpected error occurred, must have all these field profile_image [phone, name, street, grade, is_email_verified, is_phone_verified]',
+        );
       }
     }
   }

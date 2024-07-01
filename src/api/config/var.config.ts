@@ -1,0 +1,3 @@
+export class VAR_CONFIG {
+  static MAX_PROFILE_PICTURE_SIZE_IN_BYTES = 2 * 1024 * 1024;
+}
