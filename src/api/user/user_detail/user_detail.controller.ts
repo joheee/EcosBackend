@@ -14,14 +14,14 @@ export class UserDetailController {
 
   @Get('')
   @UseGuards(JwtAuthGuard)
-  @ApiOperation({ summary: 'get user detail by email' })
+  @ApiOperation({ summary: 'get user detail by token' })
   async findOne(@Req() req: Request) {
     return await this.userDetailService.findOne(req.user as User);
   }
 
   @Patch('')
   @UseGuards(JwtAuthGuard)
-  @ApiOperation({ summary: 'update user detail by email (optional field)' })
+  @ApiOperation({ summary: 'update user detail by token (optional field)' })
   @ApiBody({
     description: 'endpoint for customer, driver, and admin detail information',
     type: UserDetailDto,
