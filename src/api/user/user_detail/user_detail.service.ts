@@ -55,6 +55,21 @@ export class UserDetailService {
           );
         }
 
+        const data = {
+          profile_image:
+            userDetailDto.profile_image === ''
+              ? null
+              : userDetailDto.profile_image,
+          phone: userDetailDto.phone,
+          name: userDetailDto.name,
+          street: userDetailDto.street,
+          grade: parseInt(userDetailDto.grade.toString()),
+          is_email_verified: userDetailDto.is_email_verified as boolean,
+          is_phone_verified: userDetailDto.is_phone_verified as boolean,
+        };
+
+        console.log(data);
+
         const updateUser = await this.prisma.user.update({
           where: {
             email: user.email,
@@ -63,15 +78,7 @@ export class UserDetailService {
             role: userDetailDto.role,
             user_detail: {
               update: {
-                data: {
-                  profile_image: userDetailDto.profile_image,
-                  phone: userDetailDto.phone,
-                  name: userDetailDto.name,
-                  street: userDetailDto.street,
-                  grade: userDetailDto.grade,
-                  is_email_verified: userDetailDto.is_email_verified,
-                  is_phone_verified: userDetailDto.is_phone_verified,
-                },
+                data: data,
               },
             },
           },
@@ -116,7 +123,7 @@ export class UserDetailService {
         throw error;
       } else {
         throw new InternalServerErrorException(
-          'An unexpected error occurred, must have all these field profile_image [phone, name, street, grade, is_email_verified, is_phone_verified]',
+          `An unexpected error occurred : ${error}`,
         );
       }
     }

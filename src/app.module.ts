@@ -9,6 +9,7 @@ import { UserDetailModule } from './api/user/user_detail/user_detail.module';
   imports: [
     ServeStaticModule.forRoot({
       rootPath: join(__dirname, '..', 'public'),
+      serveRoot: '/public',
     }),
     AuthModule,
     UserDetailModule,
