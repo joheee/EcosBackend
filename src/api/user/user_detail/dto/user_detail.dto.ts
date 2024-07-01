@@ -1,40 +1,92 @@
 import { Role } from '@prisma/client';
-
 import { ApiProperty } from '@nestjs/swagger';
 import { Transform } from 'class-transformer';
-import { IsNumber } from 'class-validator';
+import {
+  IsNumber,
+  IsOptional,
+  IsString,
+  IsBoolean,
+  IsEnum,
+} from 'class-validator';
 
 export class UserDetailDto {
-  @ApiProperty({ example: 'John Doe', description: 'The name of the user' })
-  name: string;
+  @IsOptional()
+  @IsString()
+  @ApiProperty({
+    example: 'John Doe',
+    description: 'The name of the user',
+    required: false,
+  })
+  name?: string;
 
+  @IsOptional()
+  @IsString()
   @ApiProperty({
     example: '1234567890',
     description: 'The phone number of the user',
+    required: false,
   })
-  phone: string;
+  phone?: string;
 
-  @ApiProperty({ example: 'CUSTOMER', description: 'The role of the user' })
-  role: Role;
+  @IsOptional()
+  @IsEnum(Role)
+  @ApiProperty({
+    example: 'CUSTOMER',
+    description: 'The role of the user',
+    required: false,
+  })
+  role?: Role;
 
-  profile_image: string;
+  @IsOptional()
+  @IsString()
+  @ApiProperty({
+    type: 'string',
+    format: 'binary',
+    description: 'user profile',
+    required: false,
+  })
+  profile_image_file?: string;
 
+  @IsOptional()
+  @IsString()
+  profile_image?: string;
+
+  @IsOptional()
+  @IsString()
   @ApiProperty({
     example: 'Main Street',
     description: 'The street of the user',
+    required: false,
   })
-  street: string;
+  street?: string;
 
+  @IsOptional()
   @IsNumber()
-  @Transform(({ value }) => parseInt(value))
-  @ApiProperty({ example: 5, description: 'The grade of the user' })
-  grade: number;
+  @Transform(({ value }) => parseInt(value, 10))
+  @ApiProperty({
+    example: 5,
+    description: 'The grade of the user',
+    required: false,
+  })
+  grade?: number;
 
-  @ApiProperty({ example: true, description: 'Is email verified' })
+  @IsOptional()
+  @IsBoolean()
   @Transform(({ value }) => value === 'true' || value === true)
-  is_email_verified: boolean;
+  @ApiProperty({
+    example: true,
+    description: 'Is email verified',
+    required: false,
+  })
+  is_email_verified?: boolean;
 
-  @ApiProperty({ example: true, description: 'Is phone verified' })
+  @IsOptional()
+  @IsBoolean()
   @Transform(({ value }) => value === 'true' || value === true)
-  is_phone_verified: boolean;
+  @ApiProperty({
+    example: true,
+    description: 'Is phone verified',
+    required: false,
+  })
+  is_phone_verified?: boolean;
 }

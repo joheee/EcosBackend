@@ -42,7 +42,7 @@ export class UserDetailController {
   @UseGuards(JwtAuthGuard)
   @ApiOperation({ summary: 'update user detail by token (optional field)' })
   @UseInterceptors(
-    FileInterceptor('profile_image', {
+    FileInterceptor('profile_image_file', {
       storage: UserDetailUpload.storageOptions,
     }),
   )
@@ -50,37 +50,16 @@ export class UserDetailController {
   @UsePipes(new ParseUserDetailPipe())
   @ApiBody({
     description: 'endpoint for customer, driver, and admin detail information',
-    required: true,
-    schema: {
-      type: 'object',
-      properties: {
-        profile_image: {
-          type: 'string',
-          format: 'binary',
-        },
-        name: { type: 'string', example: 'John Doe' },
-        phone: { type: 'string', example: '1234567890' },
-        role: {
-          type: 'string',
-          enum: ['DEFAULT', 'ADMIN', 'DRIVER', 'CUSTOMER'],
-          example: 'CUSTOMER',
-        },
-        street: { type: 'string', example: 'Main Street' },
-        grade: { type: 'number', example: 5 },
-        is_email_verified: { type: 'boolean', example: true },
-        is_phone_verified: { type: 'boolean', example: true },
-      },
-    },
+    type: UserDetailDto,
   })
   async update(
     @Req() req: Request,
-    @UploadedFile() profile_image: Express.Multer.File,
+    @UploadedFile() profile_image_file: Express.Multer.File,
     @Body() userDetailDto: UserDetailDto,
   ) {
-    if (profile_image !== undefined) {
-      userDetailDto.profile_image = profile_image.filename;
+    if (profile_image_file !== undefined) {
+      userDetailDto.profile_image = profile_image_file.filename;
     }
-    console.log(userDetailDto);
     return await this.userDetailService.update(req.user as User, userDetailDto);
   }
 }

@@ -68,8 +68,6 @@ export class UserDetailService {
           is_phone_verified: userDetailDto.is_phone_verified as boolean,
         };
 
-        console.log(data);
-
         const updateUser = await this.prisma.user.update({
           where: {
             email: user.email,
