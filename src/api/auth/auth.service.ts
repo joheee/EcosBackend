@@ -52,19 +52,6 @@ export class AuthService {
     try {
       const { email, password, phone, name, street, grade } = registerAuthDto;
 
-      if (
-        typeof email === 'undefined' ||
-        typeof password === 'undefined' ||
-        typeof phone === 'undefined' ||
-        typeof name === 'undefined' ||
-        typeof street === 'undefined' ||
-        typeof grade === 'undefined'
-      ) {
-        throw new BadRequestException(
-          'All fields must be provided [email, password, phone, name, street, grade]',
-        );
-      }
-
       const emailCheckUser = await this.prisma.user.findUnique({
         where: { email },
       });
