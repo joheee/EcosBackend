@@ -14,8 +14,15 @@ import { DriverVehicleDetailDto } from './dto/driver_vehicle_detail.dto';
 export class DriverVehicleDetailService {
   constructor(private prisma: PrismaService) {}
 
-  async create(user: User, driverVehicleDetailDto: DriverVehicleDetailDto) {
+  async create(
+    user: User,
+    vehicle_image_file: Express.Multer.File,
+    driverVehicleDetailDto: DriverVehicleDetailDto,
+  ) {
     try {
+      if (vehicle_image_file !== null) {
+        driverVehicleDetailDto.vehicle_image = vehicle_image_file.filename;
+      }
       const currDrriver = await this.prisma.user.findUnique({
         where: {
           email: user.email,

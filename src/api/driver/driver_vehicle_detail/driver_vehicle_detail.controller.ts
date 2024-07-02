@@ -54,11 +54,9 @@ export class DriverVehicleDetailController {
     @UploadedFile() vehicle_image_file: Express.Multer.File,
     @Body() driverVehicleDetailDto: DriverVehicleDetailDto,
   ) {
-    if (vehicle_image_file !== null) {
-      driverVehicleDetailDto.vehicle_image = vehicle_image_file.filename;
-    }
     return await this.driverVehicleDetailService.create(
       req.user as User,
+      vehicle_image_file,
       driverVehicleDetailDto,
     );
   }

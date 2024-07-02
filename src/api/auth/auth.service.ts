@@ -85,7 +85,7 @@ export class AuthService {
       await this.prisma.userDetail.create({
         data: {
           email,
-          profile_image: 'dummy.png',
+          profile_image: 'images.webp',
           phone,
           name,
           street,
@@ -107,7 +107,7 @@ export class AuthService {
         throw error;
       }
       throw new InternalServerErrorException(
-        'An unexpected error occurred during registration.',
+        `An unexpected error occurred during registration: ${error}`,
       );
     }
   }

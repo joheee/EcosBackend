@@ -57,9 +57,10 @@ export class UserDetailController {
     @UploadedFile() profile_image_file: Express.Multer.File,
     @Body() userDetailDto: UserDetailDto,
   ) {
-    if (profile_image_file !== undefined) {
-      userDetailDto.profile_image = profile_image_file.filename;
-    }
-    return await this.userDetailService.update(req.user as User, userDetailDto);
+    return await this.userDetailService.update(
+      req.user as User,
+      profile_image_file,
+      userDetailDto,
+    );
   }
 }

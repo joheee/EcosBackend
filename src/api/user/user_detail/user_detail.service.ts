@@ -32,8 +32,15 @@ export class UserDetailService {
     return new HttpException(userDetail, HttpStatus.CREATED);
   }
 
-  async update(user: User, userDetailDto: UserDetailDto) {
+  async update(
+    user: User,
+    profile_image_file: Express.Multer.File,
+    userDetailDto: UserDetailDto,
+  ) {
     try {
+      if (profile_image_file !== undefined) {
+        userDetailDto.profile_image = profile_image_file.filename;
+      }
       const emailCheck = await this.prisma.user.findUnique({
         where: {
           email: user.email,
